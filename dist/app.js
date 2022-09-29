@@ -24,7 +24,7 @@ const errorHandler = (err, req, res, next) => {
 };
 app.use(errorHandler);
 mongoose_1.default
-    .connect(process.env.URL || "")
+    .connect(process.env.MONGO_URL || "")
     .then(() => {
     console.log("dataBase connected");
 })
