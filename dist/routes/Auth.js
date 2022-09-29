@@ -11,4 +11,4 @@ router.get("/", (req, res) => {
 });
 router.post("/login", Auth_1.default.loginFunction);
 router.post("/register", Auth_1.default.registerFunction);
-exports = router;
+exports.default = router;

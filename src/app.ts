@@ -6,17 +6,17 @@ import express, {
   ErrorRequestHandler,
 } from "express";
 import { Server } from "http";
+import authRout from "./routes/Auth";
 import createHttpError from "http-errors";
 import { config } from "dotenv";
 import mongoose from "mongoose";
-
 config();
 const app: Application = express();
-
+app.use(express.json());
+app.use("/", authRout);
 app.use((req: Request, res: Response, next: NextFunction) => {
   next(new createHttpError.NotFound());
 });
-app.use(express.json());
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   res.status(err.status || 500);
   res.send({
@@ -26,9 +26,8 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
 };
 
 app.use(errorHandler);
-
 mongoose
-  .connect(process.env.URL || "")
+  .connect(process.env.MONGO_URL || "")
   .then(() => {
     console.log("dataBase connected");
   })

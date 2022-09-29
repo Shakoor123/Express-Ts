@@ -30,8 +30,9 @@ const registerFunction = (req, res, next) => __awaiter(void 0, void 0, void 0, f
 });
 //LOGIN USER
 const loginFunction = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const email = req.body.email;
     try {
-        const user = yield user_1.default.findOne(req.body.email);
+        const user = yield user_1.default.findOne({ email });
         if (user) {
             const response = yield bcrypt_1.default.compareSync(req.body.password, user === null || user === void 0 ? void 0 : user.password);
             if (response === true) {

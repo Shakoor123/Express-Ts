@@ -11,7 +11,7 @@ const registerFunction = async (
   res: Response,
   next: NextFunction
 ) => {
-  const hash: String = await bcrypt.hashSync(req.body.password, saltRounds);
+  const hash = await bcrypt.hashSync(req.body.password, saltRounds);
 
   const user = new User({
     email: req.body.email,
@@ -31,8 +31,9 @@ const loginFunction = async (
   res: Response,
   next: NextFunction
 ) => {
+  const email: String = req.body.email;
   try {
-    const user = await User.findOne(req.body.email);
+    const user = await User.findOne({ email });
     if (user) {
       const response = await bcrypt.compareSync(
         req.body.password,
