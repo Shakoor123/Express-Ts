@@ -6,14 +6,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const http_errors_1 = __importDefault(require("http-errors"));
 const dotenv_1 = require("dotenv");
+const mongoose_1 = __importDefault(require("mongoose"));
 (0, dotenv_1.config)();
 const app = (0, express_1.default)();
-app.get("/", (req, res, next) => {
-    res.send("home page");
-});
 app.use((req, res, next) => {
     next(new http_errors_1.default.NotFound());
 });
+app.use(express_1.default.json());
 const errorHandler = (err, req, res, next) => {
     res.status(err.status || 500);
     res.send({
@@ -22,6 +21,14 @@ const errorHandler = (err, req, res, next) => {
     });
 };
 app.use(errorHandler);
+mongoose_1.default
+    .connect(process.env.URL || "")
+    .then(() => {
+    console.log("dataBase connected");
+})
+    .catch((err) => {
+    console.log(err);
+});
 const PORT = Number(process.env.PORT) || 3000;
 const server = app.listen(PORT, () => {
     console.log("server running " + PORT);
